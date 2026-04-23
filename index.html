@@ -1,278 +1,612 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio - Sam's Code</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@iconscout/unicons@4.0.8/css/line.min.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Samuel Goodman — Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #18181f;
+    --surface: #1e1e28;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --accent: #5dffb0;
+    --accent2: #3de09a;
+    --accent-dim: rgba(93,255,176,0.10);
+    --accent-dim2: rgba(93,255,176,0.18);
+    --text: #f0f0f4;
+    --muted: #8888a0;
+    --muted2: #bbbbd0;
+    --heading: 'Syne', sans-serif;
+    --body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 16px; line-height: 1.7; overflow-x: hidden; }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--heading);
+    font-weight: 800; font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.88rem; letter-spacing: 0.04em; text-transform: uppercase;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  #home {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem 5rem;
+    position: relative;
+  }
+  .hero-bg-circle {
+    position: absolute; top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(93,255,176,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 1.5rem;
+  }
+  .hero-label::before {
+    content: ''; display: block;
+    width: 24px; height: 1px; background: var(--accent);
+  }
+  .hero-name {
+    font-family: var(--heading);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .hero-name span { color: var(--accent); }
+  .hero-title {
+    font-family: var(--heading);
+    font-size: clamp(1.4rem, 3vw, 2.4rem);
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: -0.01em;
+    margin-bottom: 2rem;
+  }
+  .hero-desc {
+    max-width: 520px;
+    color: var(--muted2);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    margin-bottom: 3rem;
+  }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #0a0a0f;
+    padding: 0.75rem 1.8rem;
+    border-radius: 4px;
+    font-family: var(--heading); font-weight: 700; font-size: 0.9rem;
+    letter-spacing: 0.02em; text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--text);
+    padding: 0.75rem 1.8rem;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    font-family: var(--heading); font-weight: 600; font-size: 0.9rem;
+    letter-spacing: 0.02em; text-decoration: none;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); background: var(--accent-dim); transform: translateY(-1px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 4rem;
+    display: flex; align-items: center; gap: 10px;
+    color: var(--muted); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 40px; height: 1px; background: var(--muted);
+    animation: scrollAnim 2s infinite;
+  }
+  @keyframes scrollAnim {
+    0%,100% { width: 40px; opacity: 0.4; }
+    50% { width: 70px; opacity: 1; }
+  }
+
+  /* SECTIONS */
+  section { padding: 7rem 4rem; position: relative; }
+  .section-label {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 1rem;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, var(--border2), transparent);
+  }
+  .section-heading {
+    font-family: var(--heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.1; color: var(--text);
+    margin-bottom: 3.5rem;
+  }
+
+  /* ABOUT */
+  #about { background: var(--bg2); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+  }
+  .about-text p { color: var(--muted2); margin-bottom: 1.2rem; font-size: 1.02rem; line-height: 1.8; }
+  .about-text p strong { color: var(--text); font-weight: 500; }
+
+  .skills-grid {
+    display: flex; flex-direction: column; gap: 1.2rem;
+  }
+  .skill-category { }
+  .skill-cat-label {
+    font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; margin-bottom: 0.7rem;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-tag {
+    padding: 0.3rem 0.75rem;
+    border-radius: 3px;
+    font-size: 0.82rem; font-weight: 500;
+    border: 1px solid var(--border2);
+    color: var(--muted2);
+    background: var(--surface);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* EXPERIENCE */
+  #experience { }
+  .exp-list { display: flex; flex-direction: column; gap: 0; }
+  .exp-item {
+    display: grid; grid-template-columns: 220px 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--border);
+    position: relative;
+  }
+  .exp-item:last-child { border-bottom: 1px solid var(--border); }
+  .exp-meta { }
+  .exp-period { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+  .exp-company {
+    font-family: var(--heading); font-weight: 700; font-size: 1rem;
+    color: var(--text); margin-bottom: 0.2rem;
+  }
+  .exp-location { font-size: 0.82rem; color: var(--muted); }
+  .exp-role {
+    font-family: var(--heading); font-weight: 700; font-size: 1.15rem;
+    color: var(--accent); margin-bottom: 0.9rem;
+  }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li {
+    color: var(--muted2); font-size: 0.95rem; margin-bottom: 0.5rem;
+    display: flex; gap: 10px;
+  }
+  .exp-bullets li::before {
+    content: '—'; color: var(--accent); flex-shrink: 0; margin-top: 0.05em;
+  }
+
+  /* PROJECTS */
+  #projects { background: var(--bg2); }
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex; flex-direction: column;
+    transition: border-color 0.25s, transform 0.2s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .project-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+  .project-card:hover::before { opacity: 1; }
+  .project-num {
+    font-family: var(--heading); font-size: 0.75rem; font-weight: 800;
+    color: var(--accent); letter-spacing: 0.1em;
+    margin-bottom: 1.2rem;
+  }
+  .project-name {
+    font-family: var(--heading); font-size: 1.3rem; font-weight: 800;
+    color: var(--text); letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+  .project-desc { color: var(--muted2); font-size: 0.93rem; line-height: 1.7; margin-bottom: 1.5rem; flex: 1; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .project-tag {
+    font-size: 0.75rem; padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 600; letter-spacing: 0.03em;
+  }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.83rem; color: var(--muted); text-decoration: none;
+    font-weight: 500; letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .project-link:hover { color: var(--accent); }
+  .project-link svg { width: 12px; height: 12px; }
+
+  /* CONTACT */
+  #contact {
+    text-align: center;
+  }
+  .contact-inner { max-width: 640px; margin: 0 auto; }
+  .contact-email {
+    font-family: var(--heading);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    color: var(--text); text-decoration: none;
+    border-bottom: 1px solid var(--border2);
+    padding-bottom: 4px;
+    letter-spacing: -0.02em;
+    transition: color 0.2s, border-color 0.2s;
+    display: inline-block; margin-bottom: 2.5rem;
+  }
+  .contact-email:hover { color: var(--accent); border-color: var(--accent); }
+  .social-links { display: flex; justify-content: center; gap: 1.5rem; }
+  .social-link {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .social-link:hover { color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p { color: var(--muted); font-size: 0.82rem; }
+
+  /* DIVIDER */
+  .divider { width: 100%; height: 1px; background: var(--border); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero-label { animation: fadeUp 0.6s ease both; }
+  .hero-name { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-title { animation: fadeUp 0.6s 0.18s ease both; }
+  .hero-desc { animation: fadeUp 0.6s 0.26s ease both; }
+  .hero-ctas { animation: fadeUp 0.6s 0.34s ease both; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #home, section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .hero-scroll { display: none; }
+  }
+
+  /* Cursor accent dot */
+  .cursor-accent { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-left: 3px; vertical-align: middle; animation: blink 1.1s infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+</style>
 </head>
 <body>
-    <div class="container">
-        <nav id="header"> 
-            <div class="nav-logo">
-                <p class="nav-name">Welcome!</p>
-            </div>
 
-            <div class="nav-menu" id="MyNavMenu">
-                <ul class="nav_menu_list">
-                    <li class="nav_list">
-                        <a href="#home" class="nav-link active-link">Home</a>
-                        <div class="circle"></div>
-                    </li>
-                    <li>
-                        <div class="circle"></div>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#about" class="nav-link">About</a>
-                        <div class="circle"></div>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#projects" class="nav-link">Projects</a>
-                        <div class="circle"></div>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#contact" class="nav-link">Contact</a>
-                        <div class="circle"></div>
-                    </li>
-                </ul>
-            </div>
+<nav>
+  <div class="nav-logo">SG.</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-            <div class="mode">
-                <div class="moon-sun" id="toggle-switch">
-                    <i class="fa fa-moon" id="moon"></i>
-                    <i class="fa fa-sun" id="sun"></i>
-                </div>
-            </div>
+<!-- HERO -->
+<section id="home">
+  <div class="hero-bg-circle"></div>
+  <div class="hero-label">Full-Stack Developer</div>
+  <h1 class="hero-name">Samuel<br><span>Goodman</span><span class="cursor-accent"></span></h1>
+  <p class="hero-title">I build things for the web.</p>
+  <p class="hero-desc">
+    Software developer based in South Florida. FAMU CS grad passionate about building 
+    clean, accessible, and performant web applications — from Chrome extensions to full-stack platforms.
+  </p>
+  <div class="hero-ctas">
+    <a href="#projects" class="btn-primary">View Projects</a>
+    <a href="#contact" class="btn-secondary">Get In Touch</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
 
-            <div class="nav-menu-btn">
-                <i class="uil uil-bars" onclick="myMenuFunction()"></i>
-            </div>
-        </nav>
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About</div>
+  <h2 class="section-heading">Developer & Problem Solver</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        Hey! I'm Samuel — a full-stack developer and CS graduate from <strong>Florida A&M University</strong>. 
+        I've been building and shipping software professionally since 2023, working across support engineering, 
+        systems development, and automation.
+      </p>
+      <p>
+        My work spans <strong>frontend interfaces</strong> (React, Next.js, Tailwind) and 
+        <strong>backend systems</strong> (Node.js, Firebase, REST APIs, SQL). I care deeply about 
+        code that's readable, maintainable, and built with the user in mind.
+      </p>
+      <p>
+        Outside of code, I've led teams as a Scrum Master, published apps to the Chrome Web Store, 
+        and built projects focused on <strong>accessibility and real-world utility</strong>.
+      </p>
+      <br/>
+      <a href="Samuel_Goodman_Resume_Version.pdf" class="btn-secondary" target="_blank" download>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Resume
+      </a>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-category">
+        <div class="skill-cat-label">Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">Frontend</div>
+        <div class="skill-tags">
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Next.js</span>
+          <span class="skill-tag">Tailwind CSS</span>
+          <span class="skill-tag">Angular</span>
+          <span class="skill-tag">HTML/CSS</span>
+          <span class="skill-tag">Bootstrap</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">Backend & Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">Firebase</span>
+          <span class="skill-tag">REST APIs</span>
+          <span class="skill-tag">Git / GitHub</span>
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">Figma</span>
+        </div>
+      </div>
+      <div class="skill-category">
+        <div class="skill-cat-label">Concepts</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Agile / Scrum</span>
+          <span class="skill-tag">OOP</span>
+          <span class="skill-tag">Data Structures</span>
+          <span class="skill-tag">UX/UI Design</span>
+          <span class="skill-tag">Software Testing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <main class="wrapper">
-            <section class="featured-box" id="home">
-                <div class="featured-text">
-                    <div class="hello">
-                        <p>Hello I'm a</p>
-                    </div>
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Experience</div>
+  <h2 class="section-heading">Where I've Worked</h2>
+  <div class="exp-list">
 
-                    <div class="featured-name">
-                        <span class="typedText"></span>
-                    </div>
-
-                    <div class="text-info">
-                        <p>My name is Samuel Goodman! A full-stack developer graduate from Florida A&M University</p>
-                    </div>
-
-                    <div class="text-btn">
-                        <button class="btn hire-btn">Hire Me</button>
-                        <a href="./Samuel_Goodman_Resume_Version.pdf" download>
-                            <button class="btn">
-                                Download CV <i class="uil uil-file"></i>
-                            </button>
-                        </a>
-                    </div>
-
-                    <div class="social_icons">
-                        <div class="icon_circle"></div>
-
-                        <div class="icon">
-                            <a href="https://www.linkedin.com/in/samuel-goodman-905227225/">
-                                <i class="uil uil-linkedin-alt"></i>
-                            </a>
-                        </div>
-
-                        <div class="icon">
-                            <a href="https://github.com/Samuelg108">
-                                <i class="uil uil-github-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="featured-image">
-                    <div class="image">
-                        <iframe 
-                            src="./Samuel_Goodman_Resume_Version.pdf#toolbar=0&navpanes=0&scrollbar=0"
-                            width="100%" 
-                            height="600px">
-                        </iframe>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section" id="about">
-                <div class="top-header">
-                    <h1>About Me</h1>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="about-info">
-                            <figure class="about-me">
-                                <figcaption>
-                                    <h2>Web Developer</h2>
-                                    <p>
-                                        I've completed many full-stack web and mobile applications in teams and solo projects.
-                                        I love creating innovative projects that help improve technology, health, and accessibility.
-                                    </p>
-                                </figcaption>
-                            </figure>
-
-                            <button class="about-me-btn">Hire Me</button>
-                        </div>
-                    </div>
-
-                    <div class="skill">
-                        <div class="skill-box">
-                            <span class="title">HTML</span>
-                            <div class="skill-bar HTML">
-                                <span class="skill-per">
-                                    <span class="tooltip">80%</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="skill-box">
-                            <span class="title">CSS</span>
-                            <div class="skill-bar css">
-                                <span class="skill-per">
-                                    <span class="tooltip">80%</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="skill-box">
-                            <span class="title">C++</span>
-                            <div class="skill-bar">
-                                <span class="skill-per cplusplus">
-                                    <span class="tooltip">80%</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="skill-box">
-                            <span class="title">JavaScript</span>
-                            <div class="skill-bar">
-                                <span class="skill-per javascript">
-                                    <span class="tooltip">80%</span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section" id="projects">
-                <div class="top-header">
-                    <h1>Projects</h1>
-                </div>
-
-                <div class="project-container">
-                    <div class="project-box">
-                        <i class="fa-regular fa-paper-plane"></i>
-                        <h3>Connect-ability</h3>
-                        <label>Friend making app for disabled people</label>
-                    </div>
-
-                    <div class="project-box">
-                        <i class="uil uil-users-alt"></i>
-                        <h3>JobMaps</h3>
-                        <label>A full stack job search web application with job listings, filtering, search, saved jobs</label>
-                    </div>
-
-                    <div class="project-box">
-                        <i class="uil uil-award"></i>
-                        <h3>Job Application Tracker</h3>
-                        <label>Designed and developed a Chrome extension to track job applications</label>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section" id="contact">
-                <div class="top-header">
-                    <h1>Let's Work Together</h1>
-                    <span>Do you have a project in mind? Contact me here</span>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="contact-info">
-                            <h2>Find me <i class="uil uil-corner-right-down"></i></h2>
-                            <p><i class="uil uil-envelope"></i> Samuel.c.goodman@gmail.com</p>
-                            <p><i class="uil uil-phone"></i> Phone: 954-793-2766</p>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="form-control">
-                            <div class="form-inputs">
-                                <input type="text" class="input-field" placeholder="Your Name">
-                                <input type="text" class="input-field" placeholder="Your Email">
-                            </div>
-
-                            <div class="text-area">
-                                <input type="text" class="input-subject" placeholder="Subject">
-                                <textarea placeholder="Message"></textarea>
-                            </div>
-
-                            <div class="form-button">
-                                <button class="btn">
-                                    Send <i class="uil uil-message"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer>
-            <div class="middle-footer">
-                <ul class="footer-menu">
-                    <li class="footer_menu_list">
-                        <a href="#home">Home</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#about">About</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#projects">Projects</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#contact">Contact</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="footer-social-icons">
-                <div class="icon">
-                    <a href="https://www.linkedin.com/in/samuel-goodman-905227225/">
-                        <i class="fa-brands fa-linkedin-in"></i>
-                    </a>
-                </div>
-
-                <div class="icon">
-                    <a href="https://github.com/Samuelg108">
-                        <i class="uil uil-github-alt"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="bottom-footer">
-                <p>
-                    Copyright &copy;
-                    <a href="#home" style="text-decoration: none;">SamuelGoodman</a>
-                    - All rights reserved 2026
-                </p>
-            </div>
-        </footer>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-period">Aug 2025 — Present</div>
+        <div class="exp-company">Puttshack</div>
+        <div class="exp-location">Fort Lauderdale, FL</div>
+      </div>
+      <div class="exp-detail">
+        <div class="exp-role">Application Support Analyst / Jr. Software Support Engineer</div>
+        <ul class="exp-bullets">
+          <li>Supported POS systems, internal web apps, and user accounts across multiple platforms</li>
+          <li>Resolved front-end and back-end application issues for employees and management</li>
+          <li>Assisted with database updates, troubleshooting, workflow documentation, and software support</li>
+          <li>Collaborated with internal teams to diagnose issues and improve application reliability</li>
+        </ul>
+      </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollReveal.js/4.0.9/scrollreveal.min.js"></script>
-    <script src="script.js"></script>
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-period">Aug 2024 — Aug 2025</div>
+        <div class="exp-company">UDT</div>
+        <div class="exp-location">Orlando, FL</div>
+      </div>
+      <div class="exp-detail">
+        <div class="exp-role">Junior Software Developer / Systems Engineer</div>
+        <ul class="exp-bullets">
+          <li>Developed and tested internal tools, scripts, and automation processes</li>
+          <li>Supported backend services, servers, and internal applications</li>
+          <li>Used Git for version control, code updates, patches, and deployments</li>
+          <li>Assisted with troubleshooting, documentation, and application testing</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-period">May 2023 — Aug 2024</div>
+        <div class="exp-company">SpectrumX</div>
+        <div class="exp-location">Tallahassee, FL</div>
+      </div>
+      <div class="exp-detail">
+        <div class="exp-role">Software Developer Intern / Technical Support Engineer</div>
+        <ul class="exp-bullets">
+          <li>Built Python automation scripts to improve internal workflows</li>
+          <li>Maintained dashboards, internal tools, and backend support systems</li>
+          <li>Troubleshot application errors and documented technical solutions</li>
+          <li>Supported end users with software issues and technical troubleshooting</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Projects</div>
+  <h2 class="section-heading">Things I've Built</h2>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-num">01</div>
+      <div class="project-name">JobMaps</div>
+      <div class="project-desc">
+        Full-stack job search web app with job listings, filtering, search, saved jobs, 
+        and application history. Features an interactive map for viewing jobs by location.
+      </div>
+      <div class="project-tags">
+        <span class="project-tag">Next.js</span>
+        <span class="project-tag">React</span>
+        <span class="project-tag">TypeScript</span>
+        <span class="project-tag">Tailwind CSS</span>
+        <span class="project-tag">Local Storage</span>
+      </div>
+      <a href="https://github.com/Samuelg108" target="_blank" class="project-link">
+        View on GitHub
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">02</div>
+      <div class="project-name">Job Application Tracker</div>
+      <div class="project-desc">
+        Chrome extension for tracking job applications — save positions, track statuses, 
+        add notes, set reminders, and export to CSV. Published on the Chrome Web Store with autofill for Indeed & LinkedIn.
+      </div>
+      <div class="project-tags">
+        <span class="project-tag">JavaScript</span>
+        <span class="project-tag">Chrome Extension APIs</span>
+        <span class="project-tag">Manifest V3</span>
+        <span class="project-tag">HTML/CSS</span>
+      </div>
+      <a href="https://github.com/Samuelg108" target="_blank" class="project-link">
+        View on GitHub
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">03</div>
+      <div class="project-name">Connect Ability</div>
+      <div class="project-desc">
+        Accessible social networking platform built for people with disabilities. 
+        Led the team as Scrum Master — coordinated Agile workflows, sprint planning, and implemented 
+        real-time features with Firebase. Grew user interaction by 25% post-launch.
+      </div>
+      <div class="project-tags">
+        <span class="project-tag">Firebase</span>
+        <span class="project-tag">JavaScript</span>
+        <span class="project-tag">HTML/CSS</span>
+        <span class="project-tag">Agile</span>
+      </div>
+      <a href="https://github.com/Samuelg108" target="_blank" class="project-link">
+        View on GitHub
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" style="justify-content: center;">Contact</div>
+  <h2 class="section-heading" style="text-align: center;">Let's Work Together</h2>
+  <div class="contact-inner">
+    <p style="color: var(--muted2); margin-bottom: 2.5rem; font-size: 1.05rem;">
+      Have a project in mind or want to connect? My inbox is always open.
+    </p>
+    <a href="mailto:samuel.c.goodman@gmail.com" class="contact-email">samuel.c.goodman@gmail.com</a>
+    <div class="social-links">
+      <a href="https://linkedin.com/in/samuel-goodman-905227225" target="_blank" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/Samuelg108" target="_blank" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="tel:9547932766" class="social-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        954-793-2766
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Designed & built by Samuel Goodman</p>
+  <p>© 2026 — All rights reserved</p>
+</footer>
+
 </body>
 </html>
